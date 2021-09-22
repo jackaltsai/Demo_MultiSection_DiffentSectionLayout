@@ -10,6 +10,14 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
+    
+    // 範例 2: 多個 section，每個 section 搭配不同的 NSCollectionLayoutSection 排版
+//    分成多個 section，依據以下規則排版:
+//    section number 偶數的 section
+//    group 延水平方向排列，可水平滑動。
+//    section number 奇數的 section
+//    group 延垂直方向排列。
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.collectionViewLayout = generateLayout()
@@ -60,7 +68,6 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: UICollectionViewDataSource {
-    
     func numberOfItemsInSections(in collection: UICollectionView) -> Int {
         return 2
     }
@@ -74,11 +81,20 @@ extension ViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(VerticalCollectionViewCell.self)", for: indexPath) as! VerticalCollectionViewCell
-        cell.imageView.image = UIImage(named: "Image\(indexPath.item + 1)")
-        cell.label.text = "Image\(indexPath.item)"
-        return cell
+        
+        if indexPath.section.isMultiple(of: 2) {
+            print(indexPath.section)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(VerticalCollectionViewCell.self)", for: indexPath) as! VerticalCollectionViewCell
+            cell.imageView.image = UIImage(named: "Image\(indexPath.item + 1)")
+            cell.label.text = "Image\(indexPath.item + 1)"
+            return cell
+        } else {
+            print(indexPath.section)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(HorizontalCollectionViewCell.self)", for: indexPath) as! HorizontalCollectionViewCell
+            cell.imageView.image = UIImage(named: "Product\(indexPath.item + 1)")
+            cell.label.text = "Product\(indexPath.item + 1)"
+            return cell
+        }
+        
     }
-    
-    
 }
